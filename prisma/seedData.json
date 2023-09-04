@@ -1,0 +1,73 @@
+{
+  "familyTrees": [
+    {
+      "id": "9ceaf8e5-87a9-4d9a-a3b2-7d81c7f424af",
+      "name": "Smith Family Tree",
+      "persons": [
+        {
+          "id": "066b1e1e-5e0e-4f61-9f33-133b5ee5a609",
+          "familyTreeId": "9ceaf8e5-87a9-4d9a-a3b2-7d81c7f424af",
+          "firstName": "John",
+          "middleName": "Robert",
+          "nickName": "Johnny",
+          "lastName": "Smith",
+          "sex": "Male",
+          "birthDate": "1990-05-15T00:00:00.000Z",
+          "deathDate": null,
+          "comments": "Father of the family",
+          "parent1Id": null,
+          "parent2Id": null
+        },
+        {
+          "id": "4d0d14d1-2053-4f28-8e0c-32066af93f03",
+          "familyTreeId": "9ceaf8e5-87a9-4d9a-a3b2-7d81c7f424af",
+          "firstName": "Jane",
+          "middleName": "Elizabeth",
+          "nickName": "Janie",
+          "lastName": "Smith",
+          "sex": "Female",
+          "birthDate": "1992-08-25T00:00:00.000Z",
+          "deathDate": null,
+          "comments": "Mother of the family",
+          "parent1Id": null,
+          "parent2Id": null
+        },
+        {
+          "id": "a06e016c-4d9c-4ac7-9d8e-25d61f8c731f",
+          "familyTreeId": "9ceaf8e5-87a9-4d9a-a3b2-7d81c7f424af",
+          "firstName": "Michael",
+          "middleName": "James",
+          "nickName": "Mike",
+          "lastName": "Smith",
+          "sex": "Male",
+          "birthDate": "2010-03-10T00:00:00.000Z",
+          "deathDate": null,
+          "comments": "First child of John and Jane",
+          "parent1Id": "066b1e1e-5e0e-4f61-9f33-133b5ee5a609",
+          "parent2Id": "4d0d14d1-2053-4f28-8e0c-32066af93f03"
+        },
+        {
+          "id": "823852ce-8c58-429d-9c76-1ab1da4a7d1a",
+          "familyTreeId": "9ceaf8e5-87a9-4d9a-a3b2-7d81c7f424af",
+          "firstName": "Emily",
+          "middleName": "Grace",
+          "nickName": "Em",
+          "lastName": "Smith",
+          "sex": "Female",
+          "birthDate": "2015-12-18T00:00:00.000Z",
+          "deathDate": null,
+          "comments": "Second child of John and Jane",
+          "parent1Id": "066b1e1e-5e0e-4f61-9f33-133b5ee5a609",
+          "parent2Id": "4d0d14d1-2053-4f28-8e0c-32066af93f03"
+        }
+      ],
+      "mariages": [
+        {
+          "id": "b5e0ea61-e7d0-4f23-8d92-5f63e216ef71",
+          "partner1Id": "066b1e1e-5e0e-4f61-9f33-133b5ee5a609",
+          "partner2Id": "4d0d14d1-2053-4f28-8e0c-32066af93f03"
+        }
+      ]
+    }
+  ]
+}

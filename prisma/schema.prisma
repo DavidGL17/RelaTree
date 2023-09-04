@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model FamilyTree {
+  id     String   @id @default(uuid())
+  name   String
+  Person Person[]
+}
+
+model Person {
+  id           String     @id @default(uuid())
+  familyTreeId String
+  familyTree   FamilyTree @relation(fields: [familyTreeId], references: [id])
+  firstName    String
+  middleName   String
+  nickName     String
+  lastName     String
+  sex          String
+  birthDate    DateTime
+  deathDate    DateTime?
+  comments     String?
+  parent1Id    String?
+  parent1      Person?    @relation("parent1", fields: [parent1Id], references: [id])
+  parent2Id    String?
+  parent2      Person?    @relation("parent2", fields: [parent2Id], references: [id])
+
+  partner1Tab Mariage[] @relation("partner1")
+  partner2Tab Mariage[] @relation("partner2")
+  parent1Tab  Person[]  @relation("parent1")
+  parent2Tab  Person[]  @relation("parent2")
+}
+
+model Mariage {
+  id         String @id @default(uuid())
+  partner1Id String
+  partner1   Person @relation("partner1", fields: [partner1Id], references: [id])
+  partner2Id String
+  partner2   Person @relation("partner2", fields: [partner2Id], references: [id])
+}
