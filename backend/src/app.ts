@@ -1,15 +1,24 @@
 import { logger } from "./utils/logger";
 import dotenv from "dotenv";
-import { PrismaClient } from "@prisma/client";
+import { app } from "./routes";
 import express from "express";
+import cors from "cors";
+import morgan from "morgan";
 
 // init dotenv
 dotenv.config();
 
-const prisma = new PrismaClient();
-const app = express();
+const mainApp = express();
 
-app.use(express.json());
+// Use the login middleware
+mainApp.use(express.json()); // Parse JSON request bodies
+mainApp.use(cors()); // Enable CORS
+mainApp.use(app);
+
+// Set up Morgan to log HTTP requests
+app.use(
+  morgan("combined", { stream: { write: (message) => logger.info(message) } }),
+);
 
 // async function main() {
 //   const newFamilyTree = await prisma.familyTree.create({
@@ -23,11 +32,6 @@ app.use(express.json());
 //   logger.info(allFamilyTrees);
 // }
 
-app.get("/", async (req, res) => {
-  const allFamilyTrees = await prisma.familyTree.findMany();
-  res.json(allFamilyTrees);
-});
-
-app.listen(3000, () => {
-  logger.info("Server is running on http://localhost:3000");
+mainApp.listen(3001, "0.0.0.0", () => {
+  logger.info("Server is running on port 3001");
 });
