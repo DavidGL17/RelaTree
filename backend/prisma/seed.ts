@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import * as fs from "fs";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -10,7 +11,10 @@ const seed = async () => {
     const { familyTrees, user } = seedData;
 
     const createdUser = await prisma.user.create({
-      data: user,
+      data: {
+        email: user.email,
+        password: await bcrypt.hash(user.password, 10),
+      },
     });
 
     for (const familyTreeData of familyTrees) {
