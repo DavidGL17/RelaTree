@@ -14,6 +14,7 @@ const seed = async () => {
       data: {
         email: user.email,
         password: await bcrypt.hash(user.password, 10),
+        admin: true,
       },
     });
 
@@ -60,6 +61,16 @@ const seed = async () => {
     }
 
     console.log("Test data seeded successfully!");
+    // log the user full data
+    const updatedUser = await prisma.user.findUnique({
+      where: {
+        id: createdUser.id,
+      },
+      include: {
+        familyTrees: {},
+      },
+    });
+    console.log("User:", updatedUser);
   } catch (error) {
     console.error("Error seeding test data:", error);
   } finally {

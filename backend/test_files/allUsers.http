@@ -1,0 +1,15 @@
+# GET http://localhost:3001/user/all
+# Content-Type: application/json
+# Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTcxMjA1NDMwMX0.bA2c8IB4JP4TRyw4gwnQNRKe9JNfQVVDuG0EaWX6Vg8
+
+# {
+    
+# }
+
+GET http://localhost:3001/user/admin@gmail.com
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTcxMjA1NDMwMX0.bA2c8IB4JP4TRyw4gwnQNRKe9JNfQVVDuG0EaWX6Vg8
+
+{
+    
+}
