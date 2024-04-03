@@ -6,11 +6,13 @@ import { prisma, User } from "../utils/prisma";
 
 const authRouter = express.Router();
 
+const authRoutePath: string = "/auth";
+
 // Middleware to handle login requests
 authRouter.post(
   "/login",
   async (req: Request, res: Response): Promise<void> => {
-    logger.info("GET request to /login");
+    logger.info(`POST request to ${authRoutePath}/login`);
     try {
       const { email, password } = req.body;
 
@@ -48,4 +50,4 @@ authRouter.post(
   },
 );
 
-export { authRouter };
+export { authRouter, authRoutePath };

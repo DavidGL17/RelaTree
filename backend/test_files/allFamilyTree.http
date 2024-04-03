@@ -1,0 +1,7 @@
+GET http://localhost:3001/familyTree/
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTcxMjE1ODk2NH0.ZMZ90n6v0QILSq6ALxWCiagLAFmwDXPM4wWwCECS650
+
+{
+    
+}

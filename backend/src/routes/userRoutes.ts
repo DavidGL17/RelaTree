@@ -7,11 +7,13 @@ import { removePassword } from "../utils/general";
 
 const userRouter = express.Router();
 
+const userRoutePath: string = "/user";
+
 // Register a new user
 userRouter.post(
   "/register",
   async (req: Request, res: Response): Promise<void> => {
-    logger.info("POST request to /register");
+    logger.info(`POST request to ${userRoutePath}/register`);
     try {
       const { email, password } = req.body;
 
@@ -53,7 +55,7 @@ userRouter.get(
   "/all",
   authenticateToken,
   async (req: Request, res: Response): Promise<void> => {
-    logger.info("GET request to /all");
+    logger.info(`GET request to ${userRoutePath}/all`);
     try {
       const users = await prisma.user.findMany({
         include: { familyTrees: true },
@@ -71,7 +73,7 @@ userRouter.get(
   "/:email",
   authenticateToken,
   async (req: Request, res: Response): Promise<void> => {
-    logger.info("GET request to /:email");
+    logger.info(`GET request to ${userRoutePath}/:email`);
     try {
       const { email } = req.params;
 
@@ -99,7 +101,7 @@ userRouter.delete(
   "/:username",
   authenticateToken,
   async (req: Request, res: Response): Promise<void> => {
-    logger.info("POST request to /delete");
+    logger.info(`DELETE request to ${userRoutePath}/:username`);
     try {
       const { email } = req.params;
       // search for user with username
@@ -126,4 +128,4 @@ userRouter.delete(
   },
 );
 
-export { userRouter };
+export { userRouter, userRoutePath };
