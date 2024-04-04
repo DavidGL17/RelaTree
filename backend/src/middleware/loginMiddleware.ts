@@ -18,7 +18,7 @@ const authenticateToken = (
   new Promise<void>((resolve, reject) => {
     jwt.verify(
       token,
-      "your-secret-key",
+      "your-secret-key", // TODO secure this
       (err: VerifyErrors | null, data: JwtPayload | undefined) => {
         if (err) {
           reject(err);

@@ -30,18 +30,15 @@ jobs:
               run: cd backend && npm install
             - name: Lint
               run: cd backend && npm run lint
-    # build-frontend:
-    #     runs-on: ubuntu-latest
-    #     steps:
-    #         - uses: actions/checkout@v2
-    #         - uses: actions/setup-node@v1
-    #           with:
-    #               node-version: "20.12.0"
-    #         - name: Install dependencies
-    #           run: cd frontend && npm install
-    #         - name: setup for prisma
-    #           run: cd frontend && cp .env.example .env
-    #         - name: Generate Prisma schema
-    #           run: cd frontend && npx prisma generate
-    #         - name: Build
-    #           run: cd frontend && npm run build
+
+    build-frontend:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: "20.12.0"
+            - name: Install dependencies
+              run: cd frontend && npm install
+            - name: Build
+              run: cd frontend && npm run build
