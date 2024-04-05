@@ -1,10 +1,21 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { Session } from "next-auth";
 
 // a small interface to define the user returned by the api
 interface ReturnedUser {
     token: string;
     user: { email: string };
+}
+
+interface User {
+    email: string;
+}
+
+declare module "next-auth" {
+    interface Session {
+        token?: string;
+    }
 }
 
 const options: NextAuthOptions = {
@@ -46,8 +57,8 @@ const options: NextAuthOptions = {
         },
         async session({ session, token, user }) {
             if (token) {
-                session.token = token;
-                session.user = token.user;
+                session.token = token.token as string;
+                session.user = token.user as User;
             }
             return session;
         },

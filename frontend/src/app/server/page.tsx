@@ -11,7 +11,7 @@ export default async function ServerPage() {
     }
 
     // get the jwt token from the session
-    const token = session?.token.token;
+    const token = session?.token;
 
     return (
         <section className="flex flex-col gap-6">
