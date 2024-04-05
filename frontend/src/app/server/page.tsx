@@ -10,9 +10,13 @@ export default async function ServerPage() {
         redirect("/api/auth/signin?callbackUrl=/server");
     }
 
+    // get the jwt token from the session
+    const token = session?.token.token;
+
     return (
         <section className="flex flex-col gap-6">
             <UserCard user={session?.user} pagetype={"Server"} />
+            <div className="text-white text-center">{token}</div>
         </section>
     );
 }

@@ -38,10 +38,15 @@ authRouter.post(
       // If the login is successful, generate a JWT token
       const token = generateToken({ email });
 
+      // strip the user of the password, id, and familyTrees fields
+      const userToSend = {
+        email: user.email,
+      };
+
       // Send the token as a response with the user information
       res.json({
         token,
-        user: { email, user },
+        user: userToSend,
       });
     } catch (error) {
       console.error("Error logging in:", error);
