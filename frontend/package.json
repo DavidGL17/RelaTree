@@ -9,7 +9,7 @@
         "lint": "next lint"
     },
     "dependencies": {
-        "eslint": "^8.57.0",
+        "eslint": "^9.3.0",
         "eslint-config-next": "^14.2.3",
         "next": "14.2.3",
         "next-auth": "^4.24.7",
