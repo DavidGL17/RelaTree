@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 function Navbar() {
     return (
@@ -14,16 +15,8 @@ function Navbar() {
                 <li>
                     <Link href="/api/auth/signout">Sign Out</Link>
                 </li>
-                <li>
-                    <Link href="/server">Server</Link>
-                </li>
-                <li>
-                    <Link href="/client">Client</Link>
-                </li>
-                <li>
-                    <Link href="/extra">Extra</Link>
-                </li>
             </ul>
+            <ThemeSwitcher />
         </nav>
     );
 }
