@@ -47,8 +47,6 @@ function useFetch<ArgType>(
                 };
             }
 
-            console.log(settings);
-
             fetch(url, settings)
                 .then((res) => {
                     if (!res.ok) {

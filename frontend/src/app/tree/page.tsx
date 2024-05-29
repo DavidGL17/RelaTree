@@ -7,6 +7,7 @@ import { useTheme } from "next-themes";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import useFetch from "@/hooks/useFetch";
+import { Tree as TreeType } from "@/types/Tree";
 
 const treeData: TreeNodeDatum = {
     name: "Parent Node",
@@ -46,12 +47,11 @@ function MainPage() {
         },
     });
 
-    const { data, isPending, error } = useFetch<any>("http://localhost:3001/familyTree", "GET", session);
+    const { data, isPending, error } = useFetch<TreeType[]>("http://localhost:3001/familyTree", "GET", session);
 
-    const user = session?.user;
-
-    console.log("User", user);
-
+    if (data) {
+        console.log(data[0].Person[0].deathDate);
+    }
     const renderNodeWithCustomStyles = (rd3tProps: { nodeDatum: any }) => {
         const { nodeDatum } = rd3tProps;
         const textColor = theme === "dark" ? "#ffffff" : "#000000";
@@ -67,33 +67,33 @@ function MainPage() {
     };
 
     return (
-        // display data and error
         <>
-            <div>
-                {isPending && <p>Loading...</p>}
-                {error && <p>{error}</p>}
-            </div>
+            {/* TODO update error display */}
+            <div>{error && <p>{error}</p>}</div>
             <div className="flex h-screen">
-                {/* Side Panel */}
                 <div className="w-1/4 p-4">
                     <h2 className="text-xl font-bold mb-4">Item List</h2>
-                    {loading ? (
+                    {isPending ? (
                         <p>Loading...</p>
                     ) : (
                         <ul>
-                            {/* {items.map((item) => (
-                            <li key={item.id} className="mb-2">
-                                <Card>
-                                    <CardBody>
-                                        <p>{item.name}</p>
-                                    </CardBody>
-                                </Card>
-                            </li>
-                        ))} */}
+                            {data &&
+                                data[0].Person.map((item) => (
+                                    <li key={item.id} className="mb-2">
+                                        <Card>
+                                            <CardBody>
+                                                <p>
+                                                    {item.firstName} {item.middleName} &quot;{item.nickName}&quot;{" "}
+                                                    {item.lastName} {new Date(item.birthDate).getFullYear()}-
+                                                    {item.deathDate && new Date(item.deathDate).getFullYear()}
+                                                </p>
+                                            </CardBody>
+                                        </Card>
+                                    </li>
+                                ))}
                         </ul>
                     )}
                 </div>
-
                 {/* Main Content */}
                 <div className="flex-1 p-4">
                     <h1 className="text-2xl font-bold mb-4">Tree Graph</h1>
