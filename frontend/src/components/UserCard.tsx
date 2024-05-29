@@ -23,7 +23,7 @@ export default function Card({ user, pagetype }: Props) {
     return (
         <section className="flex flex-col gap-4">
             {emailDisplay}
-            <p className="text-2xl text-white text-center">{pagetype} Page!</p>
+            <p>{pagetype} Page!</p>
         </section>
     );
 }

@@ -8,7 +8,8 @@ const authenticateToken = (
   res: Response,
   next: NextFunction,
 ): void => {
-  const token = req.headers.authorization;
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
     res.sendStatus(401); // Unauthorized

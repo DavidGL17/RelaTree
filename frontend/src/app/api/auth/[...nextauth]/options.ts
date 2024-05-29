@@ -1,6 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { Session } from "next-auth";
+import getConfig from "next/config";
 
 // a small interface to define the user returned by the api
 interface ReturnedUser {
@@ -26,8 +27,9 @@ const options: NextAuthOptions = {
                 email: { label: "email", type: "text" },
                 password: { label: "Password", type: "password" },
             },
+
             async authorize(credentials, req) {
-                const res = await fetch("http://localhost:3001/auth/login", {
+                const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/auth/login", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
