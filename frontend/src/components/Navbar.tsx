@@ -13,7 +13,7 @@ function Navbar() {
                     <Link href="/tree">Tree</Link>
                 </li>
                 <li>
-                    <Link href="/api/auth/signin">Sign In</Link>
+                    <Link href="/api/auth/signin?callbackUrl=/tree">Sign In</Link>
                 </li>
                 <li>
                     <Link href="/api/auth/signout">Sign Out</Link>

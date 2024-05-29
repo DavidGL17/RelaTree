@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Card, CardBody } from "@nextui-org/react";
 import { Tree, TreeNodeDatum } from "react-d3-tree";
 import { useTheme } from "next-themes";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import useFetch from "@/hooks/useFetch";
 
 const treeData: TreeNodeDatum = {
     name: "Parent Node",
@@ -32,35 +35,22 @@ const treeData: TreeNodeDatum = {
     },
 };
 
-interface Item {
-    id: number;
-    name: string;
-}
-
-const fetchItems = async (): Promise<Item[]> => {
-    // Simulating a server fetch, replace this with actual fetch call
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve([
-                { id: 1, name: "Item 1" },
-                { id: 2, name: "Item 2" },
-                { id: 3, name: "Item 3" },
-            ]);
-        }, 1000);
-    });
-};
-
-const MainPage = () => {
+function MainPage() {
     const { theme } = useTheme();
-    const [items, setItems] = useState<Item[]>([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetchItems().then((data) => {
-            setItems(data);
-            setLoading(false);
-        });
-    }, []);
+    const { data: session } = useSession({
+        required: true,
+        onUnauthenticated() {
+            redirect("/api/auth/signin?callbackUrl=/tree");
+        },
+    });
+
+    const { data, isPending, error } = useFetch<any>("http://localhost:3001/familyTree", "GET", session);
+
+    const user = session?.user;
+
+    console.log("User", user);
 
     const renderNodeWithCustomStyles = (rd3tProps: { nodeDatum: any }) => {
         const { nodeDatum } = rd3tProps;
@@ -77,15 +67,21 @@ const MainPage = () => {
     };
 
     return (
-        <div className="flex h-screen">
-            {/* Side Panel */}
-            <div className="w-1/4 p-4">
-                <h2 className="text-xl font-bold mb-4">Item List</h2>
-                {loading ? (
-                    <p>Loading...</p>
-                ) : (
-                    <ul>
-                        {items.map((item) => (
+        // display data and error
+        <>
+            <div>
+                {isPending && <p>Loading...</p>}
+                {error && <p>{error}</p>}
+            </div>
+            <div className="flex h-screen">
+                {/* Side Panel */}
+                <div className="w-1/4 p-4">
+                    <h2 className="text-xl font-bold mb-4">Item List</h2>
+                    {loading ? (
+                        <p>Loading...</p>
+                    ) : (
+                        <ul>
+                            {/* {items.map((item) => (
                             <li key={item.id} className="mb-2">
                                 <Card>
                                     <CardBody>
@@ -93,20 +89,21 @@ const MainPage = () => {
                                     </CardBody>
                                 </Card>
                             </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
+                        ))} */}
+                        </ul>
+                    )}
+                </div>
 
-            {/* Main Content */}
-            <div className="flex-1 p-4">
-                <h1 className="text-2xl font-bold mb-4">Tree Graph</h1>
-                <div className="border p-4" style={{ height: "500px" }}>
-                    <Tree data={treeData} renderCustomNodeElement={renderNodeWithCustomStyles} />{" "}
+                {/* Main Content */}
+                <div className="flex-1 p-4">
+                    <h1 className="text-2xl font-bold mb-4">Tree Graph</h1>
+                    <div className="border p-4" style={{ height: "500px" }}>
+                        <Tree data={treeData} renderCustomNodeElement={renderNodeWithCustomStyles} />{" "}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
-};
+}
 
 export default MainPage;
