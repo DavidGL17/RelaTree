@@ -4,6 +4,8 @@
 - [2. API](#2-api)
 - [3. Work to do](#3-work-to-do)
 
+---
+
 This backend is written in typescript, and uses express to handle the API and postgresql to store the data, with prisma as the ORM.
 
 # 1. Installation for development
