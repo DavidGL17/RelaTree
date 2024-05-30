@@ -1,33 +1,16 @@
-# RelaTree
+# RelaTree <!-- omit from toc -->
 
-A web app to create and update you family tree.
+A web app to create and update you family tree. Composed of a backend using node, and a frontend using react and nextjs.
 
-## Installation
+---
 
-Start a postgres server using the docker-compose file in the database folder.
+- [1. Installation for development](#1-installation-for-development)
 
-```sh
-cd database
-docker-compose up
-```
+---
 
-Apply the prisma schema to the database.
+# 1. Installation for development
 
-```sh
-cd prisma
-npx prisma db push
-```
+Look into each readme for how to install and run the backend and frontend.
 
-Seed the database with some data (for testing purposes)
-
-```sh
-cd ..
-npm run seed
-```
-
-Install the dependencies and devDependencies and start the server.
-
-```sh
-npm i
-npm run dev
-```
+-   [Backend](./backend/README.md)
+-   [Frontend](./frontend/README.md)

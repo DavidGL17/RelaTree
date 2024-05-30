@@ -1,8 +1,12 @@
-# Backend for the RelaTree project
+# Backend for the RelaTree project <!-- omit from toc -->
+
+- [1. Installation for development](#1-installation-for-development)
+- [2. API](#2-api)
+- [3. Work to do](#3-work-to-do)
 
 This backend is written in typescript, and uses express to handle the API and postgresql to store the data, with prisma as the ORM.
 
-## Setup
+# 1. Installation for development
 
 First, install the dependencies:
 
@@ -22,7 +26,20 @@ You can then launch the database from the database folder:
 
 ```bash
 cd database
+mkdir db # only the first time
 docker-compose up -d
+```
+
+Then create the db schema with prisma :
+
+```bash
+npx prisma db push
+```
+
+You can seed the database with some data (for testing purposes):
+
+```bash
+npm run seed
 ```
 
 Finally, you can launch the backend:
@@ -33,7 +50,7 @@ npm run dev
 
 The script [start_dev](start_dev.sh) will launch the server with the database at the same time.
 
-## API
+# 2. API
 
 | Method |      Path      | Requires Auth |            Description            | Parameters (in body) |
 | :----: | :------------: | :-----------: | :-------------------------------: | :------------------: |
@@ -52,7 +69,7 @@ A user is composed of the following variables
 | password | String  | The password. Should never be returned by the API. Is stored as a hash |
 |  admin   | Boolean |                  Whether the user is an admin or not                   |
 
-## Work to do
+# 3. Work to do
 
 - Add a time limit for all tokens
 - Secure the token generation key in the .env file
