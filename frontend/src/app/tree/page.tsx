@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import useFetch from "@/hooks/useFetch";
 import { Tree as TreeType } from "@/types/Tree";
+import PersonCard from "@/components/PersonCard";
 
 const treeData: TreeNodeDatum = {
     name: "Parent Node",
@@ -80,15 +81,7 @@ function MainPage() {
                             {data &&
                                 data[0].Person.map((item) => (
                                     <li key={item.id} className="mb-2">
-                                        <Card>
-                                            <CardBody>
-                                                <p>
-                                                    {item.firstName} {item.middleName} &quot;{item.nickName}&quot;{" "}
-                                                    {item.lastName} {new Date(item.birthDate).getFullYear()}-
-                                                    {item.deathDate && new Date(item.deathDate).getFullYear()}
-                                                </p>
-                                            </CardBody>
-                                        </Card>
+                                        <PersonCard {...item} />
                                     </li>
                                 ))}
                         </ul>
