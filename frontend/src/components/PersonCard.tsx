@@ -30,12 +30,32 @@ function PersonCard(person: Person) {
         delete: "Delete",
     };
 
+    const handleView = () => {
+        console.log("Viewing person:", person);
+        // Add your view logic here
+    };
+
+    const handleEdit = () => {
+        console.log("Editing person:", person);
+        // Add your edit logic here
+    };
+
+    const handleDelete = () => {
+        console.log("Deleting person:", person);
+        // Add your delete logic here
+    };
+
     const handleSelectionChange = (keys: any) => {
         const selectedKey = Array.from(keys as Set<string>)[0];
         setSelectedOption(selectedKey);
+        optionHandlers[selectedKey]();
     };
 
-    console.log(person.deathDate);
+    const optionHandlers: Record<string, () => void> = {
+        view: handleView,
+        edit: handleEdit,
+        delete: handleDelete,
+    };
 
     return (
         <Card className="w-full">
@@ -45,7 +65,7 @@ function PersonCard(person: Person) {
                         {person.firstName} {person.middleName} {person.lastName}{" "}
                     </h5>
                     <ButtonGroup variant="flat" size="sm">
-                        <Button>{labelsMap[selectedOption]}</Button>
+                        <Button onClick={optionHandlers[selectedOption]}>{labelsMap[selectedOption]}</Button>
                         <Dropdown placement="bottom-end">
                             <DropdownTrigger>
                                 <Button isIconOnly>
