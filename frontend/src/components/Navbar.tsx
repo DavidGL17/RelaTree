@@ -8,7 +8,7 @@ function Navbar() {
     return (
         <nav className="container flex items-center justify-between mx-auto p-4">
             {/* here display the site icon, for now use the next.svg */}
-            <div className="flex  space-x-6 align-baseline">
+            <div className="flex space-x-6 align-baseline">
                 <Image src="/next.svg" alt="Next.js Logo" width={50} height={50} className="" />
                 <ul className="flex space-x-6">
                     <li>

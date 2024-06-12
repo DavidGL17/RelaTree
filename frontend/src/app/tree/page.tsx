@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { Button, Card, CardBody } from "@nextui-org/react";
 import { Tree, TreeNodeDatum } from "react-d3-tree";
 import { useTheme } from "next-themes";
 import { useSession } from "next-auth/react";
@@ -39,7 +37,6 @@ const treeData: TreeNodeDatum = {
 
 function MainPage() {
     const { theme } = useTheme();
-    const [loading, setLoading] = useState(true);
 
     const { data: session } = useSession({
         required: true,
