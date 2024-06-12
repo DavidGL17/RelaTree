@@ -46,9 +46,7 @@ function PersonCard(person: Person) {
     };
 
     const handleSelectionChange = (keys: any) => {
-        console.log("Selection changed:", keys);
         const selectedKey = Array.from(keys as Set<string>)[0];
-        console.log("Selected option:", selectedKey);
         setSelectedOption(selectedKey);
         optionHandlers[selectedKey]();
     };
