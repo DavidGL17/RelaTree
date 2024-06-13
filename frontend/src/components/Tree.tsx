@@ -1,54 +1,59 @@
-// import { Tree, Person } from "@/types/Tree";
-// import { Tree as TreeComponent, TreeNodeDatum } from "react-d3-tree";
+"use client";
+import { Tree } from "@/types/Tree";
+import { Tree as TreeComponent, TreeNodeDatum } from "react-d3-tree";
 
-// interface FamilyTreeD3Props {
-//     treeData: Tree;
-// }
+const tmpTreeData: TreeNodeDatum = {
+    name: "Parent Node",
+    children: [
+        {
+            name: "Child Node 1",
+            __rd3t: {
+                id: "Child Node 1",
+                depth: 1,
+                collapsed: false,
+            },
+        },
+        {
+            name: "Child Node 2",
+            __rd3t: {
+                id: "Child Node 2",
+                depth: 1,
+                collapsed: false,
+            },
+        },
+    ],
+    __rd3t: {
+        id: "Parent Node",
+        depth: 0,
+        collapsed: false,
+    },
+};
 
-// function transformData(people: Person[]): TreeNodeDatum {
-//     const map: { [key: string]: TreeNodeDatum } = {};
+function FamilyTree({ treeData, theme }: { treeData: Tree; theme: string | undefined }) {
+    const renderNodeWithCustomStyles = (rd3tProps: { nodeDatum: any }) => {
+        const { nodeDatum } = rd3tProps;
+        const textColor = theme === "dark" ? "#ffffff" : "#000000";
 
-//     // Create map of all nodes
-//     people.forEach((person) => {
-//         map[person.id] = {
-//             name: person.firstName + " " + person.lastName,
-//             attributes: {
-//                 firstName: person.firstName,
-//                 middleName: person.middleName,
-//                 nickName: person.nickName,
-//                 lastName: person.lastName,
-//                 sex: person.sex,
-//                 birthDate: person.birthDate.toISOString().split("T")[0],
-//                 deathDate: person.deathDate ? person.deathDate.toISOString().split("T")[0] : null,
-//             },
-//             children: [],
-//         };
-//     });
+        return (
+            <g>
+                <circle r="15" fill="#ffcc00"></circle>
+                <text fill={textColor} x="20" dy=".35em" fontSize="12">
+                    {nodeDatum.name}
+                </text>
+            </g>
+        );
+    };
+    // TODO add proper data processing and tree
 
-//     let root: TreeNodeDatum | null = null;
+    return (
+        <div style={{ width: "100%", height: "500px" }}>
+            <TreeComponent
+                data={tmpTreeData}
+                renderCustomNodeElement={renderNodeWithCustomStyles}
+                orientation="vertical"
+            />{" "}
+        </div>
+    );
+}
 
-//     // Establish parent-child relationships
-//     people.forEach((person) => {
-//         if (person.parent1Id && map[person.parent1Id]) {
-//             map[person.parent1Id].children!.push(map[person.id]);
-//         } else if (person.parent2Id && map[person.parent2Id]) {
-//             map[person.parent2Id].children!.push(map[person.id]);
-//         } else {
-//             root = map[person.id];
-//         }
-//     });
-
-//     return root!;
-// }
-
-// function FamilyTreeD3({ treeData }: FamilyTreeD3Props) {
-//     const treeStructure = transformData(treeData.Person);
-
-//     return (
-//         <div style={{ width: "100%", height: "500px" }}>
-//             <TreeComponent data={treeStructure} orientation="vertical" />
-//         </div>
-//     );
-// }
-
-// export default FamilyTreeD3;
+export default FamilyTree;

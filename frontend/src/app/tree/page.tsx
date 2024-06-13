@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import useFetch from "@/hooks/useFetch";
 import { Tree as TreeType } from "@/types/Tree";
 import PersonCard from "@/components/PersonCard";
+import FamilyTree from "@/components/Tree";
 
 const treeData: TreeNodeDatum = {
     name: "Parent Node",
@@ -35,7 +36,7 @@ const treeData: TreeNodeDatum = {
     },
 };
 
-function MainPage() {
+function TreePage() {
     const { theme } = useTheme();
 
     const { data: session } = useSession({
@@ -50,19 +51,6 @@ function MainPage() {
     if (data) {
         console.log(data[0].Person[0].deathDate);
     }
-    const renderNodeWithCustomStyles = (rd3tProps: { nodeDatum: any }) => {
-        const { nodeDatum } = rd3tProps;
-        const textColor = theme === "dark" ? "#ffffff" : "#000000";
-
-        return (
-            <g>
-                <circle r="15" fill="#ffcc00"></circle>
-                <text fill={textColor} x="20" dy=".35em" fontSize="12">
-                    {nodeDatum.name}
-                </text>
-            </g>
-        );
-    };
 
     return (
         <>
@@ -87,13 +75,19 @@ function MainPage() {
                 {/* Main Content */}
                 <div className="flex-1 p-4">
                     <h1 className="text-2xl font-bold mb-4">Tree Graph</h1>
-                    <div className="border p-4" style={{ height: "500px" }}>
-                        <Tree data={treeData} renderCustomNodeElement={renderNodeWithCustomStyles} />{" "}
-                    </div>
+                    {isPending ? (
+                        <p>Loading...</p>
+                    ) : (
+                        data && (
+                            <div className="border p-4" style={{ height: "500px" }}>
+                                <FamilyTree treeData={data[0]} theme={theme} />
+                            </div>
+                        )
+                    )}
                 </div>
             </div>
         </>
     );
 }
 
-export default MainPage;
+export default TreePage;
