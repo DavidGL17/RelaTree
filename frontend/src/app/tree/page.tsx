@@ -64,11 +64,13 @@ function TreePage() {
                     ) : (
                         <ul>
                             {data &&
-                                data[0].Person.map((item) => (
-                                    <li key={item.id} className="mb-2">
-                                        <PersonCard {...item} />
-                                    </li>
-                                ))}
+                                data[0].Person.map((item) => {
+                                    return (
+                                        <li key={item.id} className="mb-2">
+                                            <PersonCard {...item} />
+                                        </li>
+                                    );
+                                })}
                         </ul>
                     )}
                 </div>
