@@ -1,3 +1,4 @@
+// PersonCard.tsx
 "use client";
 
 import {
@@ -10,13 +11,16 @@ import {
     DropdownItem,
     DropdownMenu,
     DropdownTrigger,
+    useDisclosure,
 } from "@nextui-org/react";
 import { Person } from "@/types/Tree";
 import { useState } from "react";
 import { ChevronDownIcon } from "@/icons/ChevronDownIcon";
+import PersonModal from "@/components/PersonModal";
 
 function PersonCard(person: Person) {
     const [selectedOption, setSelectedOption] = useState<string>("view");
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const descriptionsMap: Record<string, string> = {
         view: "View details of the person",
@@ -32,7 +36,7 @@ function PersonCard(person: Person) {
 
     const handleView = () => {
         console.log("Viewing person:", person);
-        // Add your view logic here
+        onOpen();
     };
 
     const handleEdit = () => {
@@ -58,50 +62,53 @@ function PersonCard(person: Person) {
     };
 
     return (
-        <Card className="w-full">
-            <CardHeader>
-                <div className="flex justify-between items-center w-full">
-                    <h5>
-                        {person.firstName} {person.middleName} {person.lastName}{" "}
-                    </h5>
-                    <ButtonGroup variant="flat" size="sm">
-                        <Button onClick={optionHandlers[selectedOption]}>{labelsMap[selectedOption]}</Button>
-                        <Dropdown placement="bottom-end">
-                            <DropdownTrigger>
-                                <Button isIconOnly>
-                                    <ChevronDownIcon />
-                                </Button>
-                            </DropdownTrigger>
-                            <DropdownMenu
-                                disallowEmptySelection
-                                aria-label="Merge options"
-                                selectedKeys={new Set([selectedOption])}
-                                selectionMode="single"
-                                onSelectionChange={handleSelectionChange}
-                                className="max-w-[300px]"
-                            >
-                                <DropdownItem key="view" description={descriptionsMap["view"]}>
-                                    {labelsMap["view"]}
-                                </DropdownItem>
-                                <DropdownItem key="edit" description={descriptionsMap["edit"]}>
-                                    {labelsMap["edit"]}
-                                </DropdownItem>
-                                <DropdownItem key="delete" description={descriptionsMap["delete"]}>
-                                    {labelsMap["delete"]}
-                                </DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-                    </ButtonGroup>
-                </div>
-            </CardHeader>
-            <CardBody>
-                <p>
-                    {person.firstName} {person.middleName} &quot;{person.nickName}&quot; {person.lastName}{" "}
-                    {new Date(person.birthDate).getFullYear()}-
-                    {person.deathDate && new Date(person.deathDate).getFullYear()}
-                </p>
-            </CardBody>
-        </Card>
+        <>
+            <Card className="w-full">
+                <CardHeader>
+                    <div className="flex justify-between items-center w-full">
+                        <h5>
+                            {person.firstName} {person.middleName} {person.lastName}{" "}
+                        </h5>
+                        <ButtonGroup variant="flat" size="sm">
+                            <Button onClick={optionHandlers[selectedOption]}>{labelsMap[selectedOption]}</Button>
+                            <Dropdown placement="bottom-end">
+                                <DropdownTrigger>
+                                    <Button isIconOnly>
+                                        <ChevronDownIcon />
+                                    </Button>
+                                </DropdownTrigger>
+                                <DropdownMenu
+                                    disallowEmptySelection
+                                    aria-label="Merge options"
+                                    selectedKeys={new Set([selectedOption])}
+                                    selectionMode="single"
+                                    onSelectionChange={handleSelectionChange}
+                                    className="max-w-[300px]"
+                                >
+                                    <DropdownItem key="view" description={descriptionsMap["view"]}>
+                                        {labelsMap["view"]}
+                                    </DropdownItem>
+                                    <DropdownItem key="edit" description={descriptionsMap["edit"]}>
+                                        {labelsMap["edit"]}
+                                    </DropdownItem>
+                                    <DropdownItem key="delete" description={descriptionsMap["delete"]}>
+                                        {labelsMap["delete"]}
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
+                        </ButtonGroup>
+                    </div>
+                </CardHeader>
+                <CardBody>
+                    <p>
+                        {person.firstName} {person.middleName} &quot;{person.nickName}&quot; {person.lastName}{" "}
+                        {new Date(person.birthDate).getFullYear()}-
+                        {person.deathDate && new Date(person.deathDate).getFullYear()}
+                    </p>
+                </CardBody>
+            </Card>
+            <PersonModal person={person} isOpen={isOpen} onClose={onClose} />
+        </>
     );
 }
 
