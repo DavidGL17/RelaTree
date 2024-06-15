@@ -16,11 +16,14 @@ import {
 import { Person, Tree } from "@/types/Tree";
 import { useState } from "react";
 import { ChevronDownIcon } from "@/icons/ChevronDownIcon";
-import { PersonModal, ParentsForModal } from "@/components/PersonModal";
+import { ViewPersonModal, ParentsForModal } from "@/components/ViewPersonModal";
+import EditPersonModal from "@/components/EditPersonModal";
 
 function PersonCard({ person, tree }: { person: Person; tree: Tree }) {
     const [selectedOption, setSelectedOption] = useState<string>("view");
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: isViewModalOpen, onOpen: onViewModalOpen, onClose: onViewModalClose } = useDisclosure();
+    const { isOpen: isEditModalOpen, onOpen: onEditModalOpen, onClose: onEditModalClose } = useDisclosure();
+    const [currentPerson, setCurrentPerson] = useState<Person>(person);
 
     // Get the parents of the person
     const parents: ParentsForModal = {
@@ -51,12 +54,12 @@ function PersonCard({ person, tree }: { person: Person; tree: Tree }) {
 
     const handleView = () => {
         console.log("Viewing person:", person);
-        onOpen();
+        onViewModalOpen();
     };
 
     const handleEdit = () => {
         console.log("Editing person:", person);
-        // Add your edit logic here
+        onEditModalOpen();
     };
 
     const handleDelete = () => {
@@ -76,13 +79,20 @@ function PersonCard({ person, tree }: { person: Person; tree: Tree }) {
         delete: handleDelete,
     };
 
+    const handleSavePerson = (updatedPerson: Person) => {
+        console.log("Saved person:", updatedPerson);
+        setCurrentPerson(updatedPerson);
+        // Add logic to save the person to your data store
+        // TODO
+    };
+
     return (
         <>
             <Card className="w-full">
                 <CardHeader>
                     <div className="flex justify-between items-center w-full">
                         <h5>
-                            {person.firstName} {person.middleName} {person.lastName}{" "}
+                            {currentPerson.firstName} {currentPerson.middleName} {currentPerson.lastName}{" "}
                         </h5>
                         <ButtonGroup variant="flat" size="sm">
                             <Button onClick={optionHandlers[selectedOption]}>{labelsMap[selectedOption]}</Button>
@@ -116,15 +126,21 @@ function PersonCard({ person, tree }: { person: Person; tree: Tree }) {
                 </CardHeader>
                 <CardBody>
                     <p>
-                        {person.firstName} {person.middleName} &quot;{person.nickName}&quot; {person.lastName}{" "}
-                        {new Date(person.birthDate).getFullYear()}-
-                        {person.deathDate && new Date(person.deathDate).getFullYear()}
+                        {currentPerson.firstName} {currentPerson.middleName} &quot;{currentPerson.nickName}&quot;{" "}
+                        {currentPerson.lastName} {new Date(currentPerson.birthDate).getFullYear()}-
+                        {currentPerson.deathDate && new Date(currentPerson.deathDate).getFullYear()}
                     </p>
                 </CardBody>
             </Card>
-            <PersonModal person={person} parents={parents} isOpen={isOpen} onClose={onClose}>
+            <ViewPersonModal person={person} parents={parents} isOpen={isViewModalOpen} onClose={onViewModalClose}>
                 {children}
-            </PersonModal>
+            </ViewPersonModal>
+            <EditPersonModal
+                person={currentPerson}
+                isOpen={isEditModalOpen}
+                onClose={onEditModalClose}
+                onSave={handleSavePerson}
+            />
         </>
     );
 }

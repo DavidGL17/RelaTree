@@ -7,7 +7,7 @@ interface ParentsForModal {
     parent2: Person | null;
 }
 
-function PersonModal({
+function ViewPersonModal({
     person,
     parents,
     children,
@@ -92,4 +92,4 @@ function PersonModal({
     );
 }
 
-export { PersonModal, type ParentsForModal };
+export { ViewPersonModal, type ParentsForModal };
