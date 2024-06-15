@@ -22,19 +22,20 @@ function PersonCard({ person, tree }: { person: Person; tree: Tree }) {
     const [selectedOption, setSelectedOption] = useState<string>("view");
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    // initialize a dict to store the parents of the person as parent1 and parent2
+    // Get the parents of the person
     const parents: ParentsForModal = {
         parent1: null,
         parent2: null,
     };
-
-    // loop through the tree to find the parents of the person
     if (person.parent1Id) {
         parents.parent1 = tree.Person.find((p) => p.id === person.parent1Id) || null;
     }
     if (person.parent2Id) {
         parents.parent2 = tree.Person.find((p) => p.id === person.parent2Id) || null;
     }
+
+    // Get the potential children of the person
+    const children: Person[] = tree.Person.filter((p) => p.parent1Id === person.id || p.parent2Id === person.id);
 
     const descriptionsMap: Record<string, string> = {
         view: "View details of the person",
@@ -121,7 +122,9 @@ function PersonCard({ person, tree }: { person: Person; tree: Tree }) {
                     </p>
                 </CardBody>
             </Card>
-            <PersonModal person={person} parents={parents} isOpen={isOpen} onClose={onClose} />
+            <PersonModal person={person} parents={parents} isOpen={isOpen} onClose={onClose}>
+                {children}
+            </PersonModal>
         </>
     );
 }

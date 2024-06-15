@@ -10,11 +10,13 @@ interface ParentsForModal {
 function PersonModal({
     person,
     parents,
+    children,
     isOpen,
     onClose,
 }: {
     person: Person;
     parents: ParentsForModal;
+    children: Person[];
     isOpen: boolean;
     onClose: () => void;
 }) {
@@ -33,6 +35,7 @@ function PersonModal({
                         <ModalHeader>
                             {person.firstName} {person.middleName} {person.lastName}{" "}
                         </ModalHeader>
+                        {/* TODO make the parents and children interactible, when pressed it closes the modal and opens one with them. Potentially, remove the children and parents props, and pass the tree. That way the computation is only done when we open the modal, might be faster for big trees*/}
                         <ModalBody>
                             <p>
                                 <strong>Nickname:</strong> {person.nickName}
@@ -64,6 +67,21 @@ function PersonModal({
                                     {parents.parent2.lastName}
                                 </p>
                             )}
+
+                            {/* Display the children, if there are any */}
+                            {children.length > 0 && (
+                                <p>
+                                    <strong>Children:</strong>
+                                    <ul className="list-disc pl-5">
+                                        {children.map((child) => (
+                                            <li key={child.id}>
+                                                {child.firstName} {child.middleName} {child.lastName}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </p>
+                            )}
+
                             {/* Add more person details here as needed */}
                             <Button onClick={onClose}>Close</Button>
                         </ModalBody>
