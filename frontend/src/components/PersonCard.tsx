@@ -13,14 +13,28 @@ import {
     DropdownTrigger,
     useDisclosure,
 } from "@nextui-org/react";
-import { Person } from "@/types/Tree";
+import { Person, Tree } from "@/types/Tree";
 import { useState } from "react";
 import { ChevronDownIcon } from "@/icons/ChevronDownIcon";
-import PersonModal from "@/components/PersonModal";
+import { PersonModal, ParentsForModal } from "@/components/PersonModal";
 
-function PersonCard(person: Person) {
+function PersonCard({ person, tree }: { person: Person; tree: Tree }) {
     const [selectedOption, setSelectedOption] = useState<string>("view");
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    // initialize a dict to store the parents of the person as parent1 and parent2
+    const parents: ParentsForModal = {
+        parent1: null,
+        parent2: null,
+    };
+
+    // loop through the tree to find the parents of the person
+    if (person.parent1Id) {
+        parents.parent1 = tree.Person.find((p) => p.id === person.parent1Id) || null;
+    }
+    if (person.parent2Id) {
+        parents.parent2 = tree.Person.find((p) => p.id === person.parent2Id) || null;
+    }
 
     const descriptionsMap: Record<string, string> = {
         view: "View details of the person",
@@ -107,7 +121,7 @@ function PersonCard(person: Person) {
                     </p>
                 </CardBody>
             </Card>
-            <PersonModal person={person} isOpen={isOpen} onClose={onClose} />
+            <PersonModal person={person} parents={parents} isOpen={isOpen} onClose={onClose} />
         </>
     );
 }

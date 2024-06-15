@@ -47,10 +47,7 @@ function TreePage() {
     });
 
     const { data, isPending, error } = useFetch<TreeType[]>("http://localhost:3001/familyTree", "GET", session);
-
-    if (data) {
-        console.log(data[0].Person[0].deathDate);
-    }
+    // here we assume that we will always take the first tree, need to add some logic in case there are none, or many trees
 
     return (
         <>
@@ -67,7 +64,7 @@ function TreePage() {
                                 data[0].Person.map((item) => {
                                     return (
                                         <li key={item.id} className="mb-2">
-                                            <PersonCard {...item} />
+                                            <PersonCard person={item} tree={data[0]} />
                                         </li>
                                     );
                                 })}
