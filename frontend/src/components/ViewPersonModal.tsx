@@ -1,31 +1,40 @@
 // PersonModal.tsx
 import { Modal, ModalBody, ModalHeader, Button, ModalContent } from "@nextui-org/react";
-import { Person } from "@/types/Tree";
-
-interface ParentsForModal {
-    parent1: Person | null;
-    parent2: Person | null;
-}
+import { Person, Tree } from "@/types/Tree";
 
 function ViewPersonModal({
     person,
-    parents,
-    children,
+    tree,
     isOpen,
     onClose,
 }: {
     person: Person;
-    parents: ParentsForModal;
-    children: Person[];
+    tree: Tree;
     isOpen: boolean;
     onClose: () => void;
 }) {
+    // compute Age
     let age = 0;
     if (person.deathDate === null) {
         age = Math.floor((new Date().getTime() - new Date(person.birthDate).getTime()) / 31536000000);
     } else {
         age = Math.floor((new Date(person.deathDate).getTime() - new Date(person.birthDate).getTime()) / 31536000000);
     }
+
+    // Get the parents of the person
+    const parents: { parent1: Person | null; parent2: Person | null } = {
+        parent1: null,
+        parent2: null,
+    };
+    if (person.parent1Id) {
+        parents.parent1 = tree.Person.find((p) => p.id === person.parent1Id) || null;
+    }
+    if (person.parent2Id) {
+        parents.parent2 = tree.Person.find((p) => p.id === person.parent2Id) || null;
+    }
+
+    // Get the potential children of the person
+    const children: Person[] = tree.Person.filter((p) => p.parent1Id === person.id || p.parent2Id === person.id);
 
     return (
         <Modal size="2xl" isOpen={isOpen} onClose={onClose}>
@@ -35,7 +44,7 @@ function ViewPersonModal({
                         <ModalHeader>
                             {person.firstName} {person.middleName} {person.lastName}{" "}
                         </ModalHeader>
-                        {/* TODO make the parents and children interactible, when pressed it closes the modal and opens one with them. Potentially, remove the children and parents props, and pass the tree. That way the computation is only done when we open the modal, might be faster for big trees*/}
+                        {/* TODO make the parents and children interactible, when pressed it closes the modal and opens one with them. */}
                         <ModalBody>
                             <p>
                                 <strong>Nickname:</strong> {person.nickName}
@@ -92,4 +101,4 @@ function ViewPersonModal({
     );
 }
 
-export { ViewPersonModal, type ParentsForModal };
+export { ViewPersonModal };

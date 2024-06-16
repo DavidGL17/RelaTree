@@ -16,7 +16,7 @@ import {
 import { Person, Tree } from "@/types/Tree";
 import { useState } from "react";
 import { ChevronDownIcon } from "@/icons/ChevronDownIcon";
-import { ViewPersonModal, ParentsForModal } from "@/components/ViewPersonModal";
+import { ViewPersonModal } from "@/components/ViewPersonModal";
 import EditPersonModal from "@/components/EditPersonModal";
 
 function PersonCard({ person, tree }: { person: Person; tree: Tree }) {
@@ -24,21 +24,6 @@ function PersonCard({ person, tree }: { person: Person; tree: Tree }) {
     const { isOpen: isViewModalOpen, onOpen: onViewModalOpen, onClose: onViewModalClose } = useDisclosure();
     const { isOpen: isEditModalOpen, onOpen: onEditModalOpen, onClose: onEditModalClose } = useDisclosure();
     const [currentPerson, setCurrentPerson] = useState<Person>(person);
-
-    // Get the parents of the person
-    const parents: ParentsForModal = {
-        parent1: null,
-        parent2: null,
-    };
-    if (person.parent1Id) {
-        parents.parent1 = tree.Person.find((p) => p.id === person.parent1Id) || null;
-    }
-    if (person.parent2Id) {
-        parents.parent2 = tree.Person.find((p) => p.id === person.parent2Id) || null;
-    }
-
-    // Get the potential children of the person
-    const children: Person[] = tree.Person.filter((p) => p.parent1Id === person.id || p.parent2Id === person.id);
 
     const descriptionsMap: Record<string, string> = {
         view: "View details of the person",
@@ -132,9 +117,7 @@ function PersonCard({ person, tree }: { person: Person; tree: Tree }) {
                     </p>
                 </CardBody>
             </Card>
-            <ViewPersonModal person={person} parents={parents} isOpen={isViewModalOpen} onClose={onViewModalClose}>
-                {children}
-            </ViewPersonModal>
+            <ViewPersonModal person={person} tree={tree} isOpen={isViewModalOpen} onClose={onViewModalClose} />
             <EditPersonModal
                 person={currentPerson}
                 isOpen={isEditModalOpen}
