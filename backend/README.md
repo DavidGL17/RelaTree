@@ -54,14 +54,19 @@ The script [start_dev](start_dev.sh) will launch the server with the database at
 
 # 2. API
 
-| Method |      Path      | Requires Auth |            Description            | Parameters (in body) |
-| :----: | :------------: | :-----------: | :-------------------------------: | :------------------: |
-|  POST  |  /auth/login   |      No       |           Login a user            |   email, password    |
-|  POST  | /user/register |      No       |          Register a user          |   email, password    |
-|  GET   |   /user/all    |      Yes      |    Gets the list of all users     |         None         |
-|  GET   |  /user/:email  |      Yes      |    Gets a specific user's info    |         None         |
-| DELETE |  /user/:email  |      Yes      | Removes a user from the database  |         None         |
-|  GET   |  /familyTree/  |      Yes      | Gets the family trees of the user |         None         |
+| Method |      Path       | Requires Auth |              Description               |    Parameters (in body)    |
+| :----: | :-------------: | :-----------: | :------------------------------------: | :------------------------: |
+|  POST  |   /auth/login   |      No       |              Login a user              |      email, password       |
+|  POST  | /user/register  |      No       |            Register a user             |      email, password       |
+|  GET   |    /user/all    |      Yes      |       Gets the list of all users       |            None            |
+|  GET   |  /user/:email   |      Yes      |      Gets a specific user's info       |            None            |
+| DELETE |  /user/:email   |      Yes      |    Removes a user from the database    |            None            |
+|  GET   |  /familyTree/   |      Yes      |   Gets the family trees of the user    |            None            |
+|  GET   | /familyTree/:id |      Yes      | Gets the family tree with the given id |            None            |
+|  GET   |   /person/:id   |      Yes      |   Gets the person with the given id    |            None            |
+|  POST  |    /person/     |      Yes      |     Adds a person to the database      | All the fields of a person |
+|  POST  |   /person/:id   |      Yes      |    Updates a person in the database    | All the fields of a person |
+| DELETE |   /person/:id   |      Yes      |   Deletes a person from the database   |            None            |
 
 A user is composed of the following variables
 
