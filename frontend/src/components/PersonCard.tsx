@@ -49,7 +49,7 @@ function PersonCard({ person, tree }: { person: Person; tree: Tree }) {
 
     const handleDelete = () => {
         console.log("Deleting person:", person);
-        // Add your delete logic here
+        // TODO Add logic to delete the person from your data store
     };
 
     const handleSelectionChange = (keys: any) => {
