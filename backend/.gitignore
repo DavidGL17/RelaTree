@@ -3,3 +3,4 @@ database/db
 test.http
 *.log
 .env
+dist
