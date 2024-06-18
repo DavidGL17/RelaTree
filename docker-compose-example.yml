@@ -1,0 +1,51 @@
+version: "3"
+services:
+    db:
+        image: postgres:15.6
+        restart: always
+        environment:
+            POSTGRES_USER: test
+            POSTGRES_PASSWORD: test
+            POSTGRES_DB: reladb
+        ports:
+            - "5432:5432"
+        user: "1000:1000"
+        volumes:
+            - ./db:/var/lib/postgresql/data
+        networks:
+            - relanet
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U test -d reladb"]
+            interval: 10s
+            timeout: 5s
+            retries: 2
+
+    backend:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        ports:
+            - "3001:3001"
+        depends_on:
+            db:
+                condition: service_healthy
+        networks:
+            - relanet
+        volumes:
+            - ./backend.env:/app/.env # Mount the backend.env file as .env in the container
+
+    frontend:
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        ports:
+            - "3000:3000"
+        depends_on:
+            - db
+        networks:
+            - relanet
+        volumes:
+            - ./frontend.env:/app/.env # Mount the frontend.env file as .env in the container
+
+networks:
+    relanet:
