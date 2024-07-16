@@ -1,7 +1,7 @@
 // EditPersonModal.tsx
 import React, { useState, useEffect } from "react";
-import { Modal, ModalContent, ModalBody, ModalHeader, Button, Input } from "@nextui-org/react";
-import { Person } from "@/types/Tree";
+import { Modal, ModalContent, ModalBody, ModalHeader, Button, Input, Select, SelectItem } from "@nextui-org/react";
+import { Person, SexEnum } from "@/types/Tree";
 
 interface EditPersonModalProps {
     person: Person | null;
@@ -18,7 +18,7 @@ function EditPersonModal({ person, isOpen, onClose, onSave }: EditPersonModalPro
         middleName: "",
         nickName: "",
         lastName: "",
-        sex: "",
+        sex: SexEnum[SexEnum.Male],
         birthDate: new Date(),
         deathDate: null,
         comments: "",
@@ -38,7 +38,7 @@ function EditPersonModal({ person, isOpen, onClose, onSave }: EditPersonModalPro
         }
     }, [person]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         // Handle date fields specifically
         if (name === "birthDate" || name === "deathDate") {
@@ -58,6 +58,8 @@ function EditPersonModal({ person, isOpen, onClose, onSave }: EditPersonModalPro
         onSave(formData);
         onClose();
     };
+
+    // TODO missing being able to add parents
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -87,7 +89,12 @@ function EditPersonModal({ person, isOpen, onClose, onSave }: EditPersonModalPro
                                 value={formData.lastName}
                                 onChange={handleChange}
                             />
-                            <Input label="Sex" name="sex" value={formData.sex} onChange={handleChange} />
+                            <Select label="Sex" name="sex" value={formData.sex} onChange={handleChange}>
+                                {/* Map each element of the enum to a SelectItem */}
+                                {Object.values(SexEnum).map((sex) => (
+                                    <SelectItem key={sex}>{sex}</SelectItem>
+                                ))}
+                            </Select>
                             <Input
                                 type="date"
                                 label="Birth Date"

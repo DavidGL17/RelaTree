@@ -18,8 +18,9 @@ import { useState } from "react";
 import { ChevronDownIcon } from "@/icons/ChevronDownIcon";
 import { ViewPersonModal } from "@/components/ViewPersonModal";
 import EditPersonModal from "@/components/EditPersonModal";
+import { Session } from "next-auth";
 
-function PersonCard({ person, tree }: { person: Person; tree: Tree }) {
+function PersonCard({ person, tree, session }: { person: Person; tree: Tree; session: Session }) {
     const [selectedOption, setSelectedOption] = useState<string>("view");
     const { isOpen: isViewModalOpen, onOpen: onViewModalOpen, onClose: onViewModalClose } = useDisclosure();
     const { isOpen: isEditModalOpen, onOpen: onEditModalOpen, onClose: onEditModalClose } = useDisclosure();
@@ -49,7 +50,40 @@ function PersonCard({ person, tree }: { person: Person; tree: Tree }) {
 
     const handleDelete = () => {
         console.log("Deleting person:", person);
-        // TODO Add logic to delete the person from your data store
+        // make a url delete call to http://localhost:3001/person/:id to delete the person
+
+        const id = person.id;
+        const abortCont = new AbortController(); //abort fetch
+        const headers = {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            Authorization: `Bearer ${session.token}`,
+        };
+        const settings: RequestInit = {
+            signal: abortCont.signal,
+            method: "DELETE",
+            headers: headers,
+        };
+
+        fetch(`http://localhost:3001/person/${id}`, settings)
+            .then((res) => {
+                if (!res.ok) {
+                    throw Error("Could not delete the person");
+                }
+                return res.json();
+            })
+            .then((data) => {
+                console.log("Person deleted:", data);
+            })
+            .catch((err) => {
+                if (err.name === "AbortError") {
+                    console.log("fetch aborted");
+                } else {
+                    console.log(err);
+                }
+            });
+
+        return () => abortCont.abort();
     };
 
     const handleSelectionChange = (keys: any) => {
