@@ -13,6 +13,12 @@ interface Person {
     parent2Id: string | null;
 }
 
+// an enum for sex types, either male or female.
+enum SexEnum {
+    Male = "Male",
+    Female = "Female",
+}
+
 interface Tree {
     id: string;
     name: string;
@@ -20,4 +26,4 @@ interface Tree {
     Person: Person[];
 }
 
-export { type Tree, type Person };
+export { type Tree, type Person, SexEnum };

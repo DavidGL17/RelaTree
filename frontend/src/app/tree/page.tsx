@@ -5,9 +5,11 @@ import { useTheme } from "next-themes";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import useFetch from "@/hooks/useFetch";
-import { Tree as TreeType } from "@/types/Tree";
+import { Person, Tree as TreeType } from "@/types/Tree";
 import PersonCard from "@/components/PersonCard";
 import FamilyTree from "@/components/Tree";
+import { Button, useDisclosure } from "@nextui-org/react";
+import EditPersonModal from "@/components/EditPersonModal";
 
 const treeData: TreeNodeDatum = {
     name: "Parent Node",
@@ -38,6 +40,11 @@ const treeData: TreeNodeDatum = {
 
 function TreePage() {
     const { theme } = useTheme();
+    const {
+        isOpen: isAddPersonModalOpen,
+        onOpen: onAddPersonModalOpen,
+        onClose: onAddPersonModalClose,
+    } = useDisclosure();
 
     const { data: session } = useSession({
         required: true,
@@ -47,10 +54,56 @@ function TreePage() {
     });
 
     const { data, isPending, error } = useFetch<TreeType[]>("http://localhost:3001/familyTree", "GET", session);
+    // here we assume that we will always take the first tree, need to add some logic in case there are none, or many trees
 
-    if (data) {
-        console.log(data[0].Person[0].deathDate);
-    }
+    const handleAddPerson = () => {
+        console.log("Opening add person modal");
+        onAddPersonModalOpen();
+    };
+
+    const onAddPerson = (newPerson: Person) => {
+        console.log("Adding person");
+
+        if (session && data) {
+            console.log(newPerson);
+            const familyTreeId = data[0].id; // TODO change here
+            const abortCont = new AbortController(); //abort fetch
+            const headers = {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                Authorization: `Bearer ${session.token}`,
+            };
+            const settings: RequestInit = {
+                signal: abortCont.signal,
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify({
+                    ...newPerson,
+                    familyTreeId: familyTreeId,
+                }),
+            };
+
+            fetch("http://localhost:3001/person/", settings)
+                .then((res) => {
+                    if (!res.ok) {
+                        throw Error("Could not add the person");
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+                    console.log("Person added:", data);
+                })
+                .catch((err) => {
+                    if (err.name === "AbortError") {
+                        console.log("fetch aborted");
+                    } else {
+                        console.log(err);
+                    }
+                });
+
+            return () => abortCont.abort();
+        }
+    };
 
     return (
         <>
@@ -58,17 +111,23 @@ function TreePage() {
             <div>{error && <p>{error}</p>}</div>
             <div className="flex h-screen">
                 <div className="w-1/4 p-4">
-                    <h2 className="text-xl font-bold mb-4">Item List</h2>
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-xl font-bold mb-4">Item List</h2>
+                        <Button onPress={handleAddPerson}>Add person</Button>
+                    </div>
                     {isPending ? (
                         <p>Loading...</p>
                     ) : (
                         <ul>
                             {data &&
-                                data[0].Person.map((item) => (
-                                    <li key={item.id} className="mb-2">
-                                        <PersonCard {...item} />
-                                    </li>
-                                ))}
+                                session &&
+                                data[0].Person.map((item) => {
+                                    return (
+                                        <li key={item.id} className="mb-2">
+                                            <PersonCard person={item} tree={data[0]} session={session} />
+                                        </li>
+                                    );
+                                })}
                         </ul>
                     )}
                 </div>
@@ -86,6 +145,12 @@ function TreePage() {
                     )}
                 </div>
             </div>
+            <EditPersonModal
+                person={null}
+                isOpen={isAddPersonModalOpen}
+                onClose={onAddPersonModalClose}
+                onSave={onAddPerson}
+            />
         </>
     );
 }
